@@ -1,11 +1,13 @@
-const { createProductModel } = require('../models/products');
-const { findProductByNameModel } = require('../models/products');
 const { productSchema } = require('../validation/products');
+const { 
+  createProductModel, 
+  findProductByNameModel, 
+} = require('../models/products');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
 
 const createProductService = async (name, quantity) => {
-  const { error } = productSchema.validate(name, quantity);
+  const { error } = productSchema.validate({ name, quantity });
 
   if (error) {
     throw errorMessage(error.message);

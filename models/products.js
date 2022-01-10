@@ -10,9 +10,9 @@ const findProductByNameModel = async (name) => {
 
 const createProductModel = async (name, quantity) => {
   const conn = await connection();
-  const query = await conn.collection('products').insertOne({ name, quantity });
+  const { insertedId } = await conn.collection('products').insertOne({ name, quantity });
   
-  return query;
+  return { id: insertedId };
 };
 
 module.exports = {
