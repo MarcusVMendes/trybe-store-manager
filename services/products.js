@@ -1,11 +1,15 @@
+const ObjectId = require('mongodb').ObjectID;
 const { productSchema } = require('../validation/products');
 const { 
   createProductModel, 
-  findProductByNameModel, 
+  findProductByNameModel,
+  getAllProductsModel,
+  getProductByIdModel,
 } = require('../models/products');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
 
+// Requisito 1
 const createProductService = async (name, quantity) => {
   const { error } = productSchema.validate({ name, quantity });
 
@@ -27,6 +31,26 @@ const createProductService = async (name, quantity) => {
   return newProduct;
 };
 
+// Requisito 2
+const getAllProductsService = async () => {
+  const products = await getAllProductsModel();
+
+  return {
+    products: [...products],
+  };
+};
+
+const getProductByIdService = async (id) => {
+  const idIsValid = ObjectId.isValid(id);
+  /* https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid */
+  if (!idIsValid) throw errorMessage('Wrong id format');
+  const product = await getProductByIdModel(id);
+   
+  return product;
+};
+
 module.exports = {
   createProductService,
+  getAllProductsService,
+  getProductByIdService,
 };
