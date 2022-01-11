@@ -1,13 +1,23 @@
-// const ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 // const { salesSchema } = require('../validation/sales');
 // const { getProductByIdModel } = require('../models/products');
-const { createSalesModel } = require('../models/sales');
+const { 
+  createSalesModel,
+  getAllSalesModel,
+  getSaleByIdModel,
+ } = require('../models/sales');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
 
+const notFoundError = {
+  /* dica da turma no whatsapp, para capturar um code e uma message de erro diferente no middleware */
+  notFound: true,
+  code: 'not_found',
+  message: 'Sale not found',
+};
+
 // Requisito 5
 const createSalesService = async (sales) => {
-  console.log('sales service');
   const [{ quantity }] = sales;
   if (quantity <= 0) throw errorMessage('Wrong product ID or invalid quantity');
   if (typeof quantity !== 'number') throw errorMessage('Wrong product ID or invalid quantity');
@@ -19,6 +29,29 @@ const createSalesService = async (sales) => {
   };
 };
 
+// Requisito 6
+const getAllSalesService = async () => {
+  const listAllSales = await getAllSalesModel();
+  
+  return {
+    sales: [...listAllSales],
+  };
+};
+
+const getSaleByIdService = async (id) => {
+  const idIsValid = ObjectId.isValid(id);
+  /* https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid */
+  if (!idIsValid) throw notFoundError;
+  const { itensSold } = await getSaleByIdModel(id);
+   
+  return {
+    _id: id,
+    itensSold: [...itensSold],
+  };
+};
+
 module.exports = {
   createSalesService,
+  getAllSalesService,
+  getSaleByIdService,
 };
