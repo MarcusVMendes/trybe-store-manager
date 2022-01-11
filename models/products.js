@@ -31,9 +31,20 @@ const getProductByIdModel = async (id) => {
   return query;
 };
 
+// Requisito 3
+const updateProductModel = async (id, name, quantity) => {
+  const conn = await connection();
+  const query = await conn.collection('products').updateOne({ _id: ObjectId(id) }, {
+    $set: { name, quantity },
+  });
+
+  return query;
+};
+
 module.exports = {
   findProductByNameModel,
   createProductModel,
   getAllProductsModel,
   getProductByIdModel,
+  updateProductModel,
 };

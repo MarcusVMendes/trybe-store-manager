@@ -2,6 +2,7 @@ const {
   createProductService,
   getAllProductsService,
   getProductByIdService,
+  updateProductService,
 } = require('../services/products');
 
 // Requisito 1
@@ -35,8 +36,21 @@ const getProductByIdController = async (req, res, next) => {
   }
 };
 
+// Requisito 3
+const updateProductController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, quantity } = req.body;
+    const product = await updateProductService(id, name, quantity);
+    return res.status(200).json(product);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createProductController,
   getAllProductsController,
   getProductByIdController,
+  updateProductController,
 };

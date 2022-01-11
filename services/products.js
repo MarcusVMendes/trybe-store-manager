@@ -5,6 +5,7 @@ const {
   findProductByNameModel,
   getAllProductsModel,
   getProductByIdModel,
+  updateProductModel,
 } = require('../models/products');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
@@ -49,8 +50,23 @@ const getProductByIdService = async (id) => {
   return product;
 };
 
+// Requisito 3
+const updateProductService = async (id, name, quantity) => {
+  const idIsValid = ObjectId.isValid(id);
+  if (!idIsValid) throw errorMessage('Wrong id format');
+  const { error } = productSchema.validate({ name, quantity });
+  if (error) throw errorMessage(error.message);
+  await updateProductModel(id, name, quantity);
+  return {
+    _id: id,
+    name,
+    quantity,
+  };
+};
+
 module.exports = {
   createProductService,
   getAllProductsService,
   getProductByIdService,
+  updateProductService,
 };
