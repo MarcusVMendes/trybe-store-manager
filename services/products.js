@@ -6,6 +6,7 @@ const {
   getAllProductsModel,
   getProductByIdModel,
   updateProductModel,
+  deleteProductModel,
 } = require('../models/products');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
@@ -56,13 +57,23 @@ const updateProductService = async (id, name, quantity) => {
     name,
     quantity,
   };
-  
+
   return updatedProduct;
 };
 
+// Requisito 4
+const deleteProductService = async (id) => {
+  const idIsValid = ObjectId.isValid(id);
+  if (!idIsValid) throw errorMessage('Wrong id format');
+  const product = await getProductByIdModel(id);
+  await deleteProductModel(id);
+
+  return product;
+};
 module.exports = {
   createProductService,
   getAllProductsService,
   getProductByIdService,
   updateProductService,
+  deleteProductService,
 };

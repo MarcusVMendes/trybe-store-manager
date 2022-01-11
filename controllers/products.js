@@ -3,6 +3,7 @@ const {
   getAllProductsService,
   getProductByIdService,
   updateProductService,
+  deleteProductService,
 } = require('../services/products');
 
 // Requisito 1
@@ -48,9 +49,21 @@ const updateProductController = async (req, res, next) => {
   }
 };
 
+// Requisito 4
+const deleteProductController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const product = await deleteProductService(id);
+    return res.status(200).json(product);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createProductController,
   getAllProductsController,
   getProductByIdController,
   updateProductController,
+  deleteProductController,
 };

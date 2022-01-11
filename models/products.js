@@ -41,10 +41,17 @@ const updateProductModel = async (id, name, quantity) => {
   return query;
 };
 
+// Requisito 4
+const deleteProductModel = async (id) => {
+  const conn = await connection();
+  await conn.collection('products').deleteOne({ _id: ObjectId(id) });
+};
+
 module.exports = {
   findProductByNameModel,
   createProductModel,
   getAllProductsModel,
   getProductByIdModel,
   updateProductModel,
+  deleteProductModel,
 };
