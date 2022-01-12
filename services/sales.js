@@ -43,9 +43,10 @@ const getSaleByIdService = async (id) => {
   /* https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid */
   if (!idIsValid) throw notFoundError;
   const sale = await getSaleByIdModel(id);
+  if (!sale) throw notFoundError;
    
   return {
-    _id: id,
+    _id: sale.id,
     itensSold: [...sale.itensSold],
   };
 };
@@ -67,12 +68,9 @@ const deleteSaleService = async (idSale) => {
   const idIsValid = ObjectId.isValid(idSale);
   if (!idIsValid) throw errorMessage('Wrong sale ID format');
   const sale = await getSaleByIdService(idSale);
-  const { id } = await deleteSaleModel(idSale);
+  await deleteSaleModel(idSale);
 
-  return {
-    _id: id,
-    itensSold: [...sale],
-  };
+  return sale;
 };
 
 module.exports = {
