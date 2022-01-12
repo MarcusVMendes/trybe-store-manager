@@ -4,6 +4,7 @@ const {
   getAllSalesModel,
   getSaleByIdModel,
   updateSaleModel,
+  deleteSaleModel,
  } = require('../models/sales');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
@@ -61,9 +62,34 @@ const updateSaleService = async (id, sales) => {
   };
 };
 
+// Requisito 8
+// const deleteSaleService = async (id) => {
+//   const idIsValid = ObjectId.isValid(id);
+//   if (!idIsValid) throw errorMessage('Wrong sale ID format');
+//   // const sale = await getSaleByIdModel(id);
+//   const sale = await getSaleByIdModel(id);
+//   console.log(sale);
+//   await deleteSaleModel(id);
+ 
+//   return sale;
+// };
+
+const deleteSaleService = async (idSale) => {
+  const idIsValid = ObjectId.isValid(idSale);
+  if (!idIsValid) throw errorMessage('Wrong sale ID format');
+  const sale = await getSaleByIdModel(idSale);
+  const { id } = await deleteSaleModel(idSale);
+
+  return {
+    _id: id,
+    itensSold: [...sale],
+  };
+};
+
 module.exports = {
   createSalesService,
   getAllSalesService,
   getSaleByIdService,
   updateSaleService,
+  deleteSaleService,
 };
