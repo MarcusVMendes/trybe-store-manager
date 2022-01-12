@@ -56,6 +56,7 @@ const deleteSaleController = async (req, res, next) => {
     const deletedSale = await deleteSaleService(id);
     return res.status(200).json(deletedSale);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
