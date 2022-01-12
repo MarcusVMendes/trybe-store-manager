@@ -2,6 +2,7 @@ const {
   createSalesService,
   getAllSalesService,
   getSaleByIdService,
+  updateSaleService,
 } = require('../services/sales');
 
 // Requisito 5
@@ -36,8 +37,20 @@ const getSaleByIdController = async (req, res, next) => {
   }
 };
 
+// Requisito 7
+const updateSaleController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const sale = await updateSaleService(id, req.body);
+    return res.status(200).json(sale);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createSalesController,
   getAllSalesController,
   getSaleByIdController,
+  updateSaleController,
 };

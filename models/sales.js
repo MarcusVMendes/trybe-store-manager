@@ -24,8 +24,19 @@ const getSaleByIdModel = async (id) => {
   return query;
 };
 
+// Requisito 7
+const updateSaleModel = async (id, sales) => {
+  const conn = await connection();
+  const query = conn.collection('sales').updateOne({ _id: ObjectId(id) }, {
+    $set: { ...sales },
+  });
+
+  return query;
+};
+
 module.exports = {
   createSalesModel,
  getAllSalesModel,
  getSaleByIdModel,
+ updateSaleModel,
 };

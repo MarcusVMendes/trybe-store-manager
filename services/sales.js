@@ -1,10 +1,9 @@
 const ObjectId = require('mongodb').ObjectID;
-// const { salesSchema } = require('../validation/sales');
-// const { getProductByIdModel } = require('../models/products');
 const { 
   createSalesModel,
   getAllSalesModel,
   getSaleByIdModel,
+  updateSaleModel,
  } = require('../models/sales');
 
 const errorMessage = (message) => ({ code: 'invalid_data', message });
@@ -50,8 +49,21 @@ const getSaleByIdService = async (id) => {
   };
 };
 
+// Requisito 7
+const updateSaleService = async (id, sales) => {
+  const [{ quantity }] = sales;
+  if (quantity <= 0) throw errorMessage('Wrong product ID or invalid quantity');
+  if (typeof quantity !== 'number') throw errorMessage('Wrong product ID or invalid quantity');
+  await updateSaleModel(id, sales);
+  return {
+    _id: id,
+    itensSold: [...sales],
+  };
+};
+
 module.exports = {
   createSalesService,
   getAllSalesService,
   getSaleByIdService,
+  updateSaleService,
 };
